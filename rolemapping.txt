@@ -1,0 +1,42 @@
+# Portfolio Project Role Map
+
+## Roles
+
+| Role | Value | Assignment | Access |
+|---|---|---|---|
+| Visitor | No account | Not authenticated | Read public portfolio data and submit the contact form |
+| User | `user` | Default role for new accounts | No protected API permissions are currently defined |
+| Admin | `admin` | Assigned to an account by the application owner | Manage portfolio content and view/manage contact messages |
+
+Roles are defined by `App\Enums\Role` and stored on the user record. New users default to `user`. Authenticated requests use Laravel Sanctum bearer tokens. Admin routes additionally require the `role:admin` middleware.
+
+## Access map
+
+| Area | Visitor | User | Admin |
+|---|---:|---:|---:|
+| `GET /api/profile` | Yes | Yes | Yes |
+| `GET /api/projects`, `GET /api/projects/{slug}` | Yes | Yes | Yes |
+| `GET /api/skills`, `GET /api/experience`, `GET /api/educations` | Yes | Yes | Yes |
+| `POST /api/contact` (limited to 5 requests/minute) | Yes | Yes | Yes |
+| `POST /api/admin/login` (limited to 10 requests/minute) | Yes | Yes | Yes |
+| `GET /api/admin/me`, `POST /api/admin/logout` | No | No | Yes |
+| `/api/admin/projects` and project image management | No | No | Yes |
+| `/api/admin/skills`, `/api/admin/experiences`, `/api/admin/educations` | No | No | Yes |
+| `/api/admin/social-links` | No | No | Yes |
+| `/api/admin/profile` | No | No | Yes |
+| `/api/admin/messages` and message read/delete actions | No | No | Yes |
+
+The admin resource endpoints use the standard API resource methods: `GET` collection/item, `POST` create, `PUT`/`PATCH` update, and `DELETE` remove. Project images have separate upload and delete endpoints.
+
+## Authorization flow
+
+1. A user submits credentials to `POST /api/admin/login`.
+2. On valid credentials, the API issues a Sanctum bearer token and includes the user's role in the response.
+3. Admin endpoints require both a valid Sanctum token and the `admin` role. Other authenticated roles are forbidden.
+4. Logout revokes the current access token.
+
+## Notes
+
+- Login currently authenticates any valid account; it does not require the account to have the `admin` role. Only admin endpoints enforce that role.
+- `User` accounts currently have no private endpoints or capabilities beyond login/token issuance.
+- Visitors are not represented by a database role; they are simply unauthenticated callers of public endpoints.

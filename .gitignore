@@ -1,0 +1,16 @@
+# OS-specific files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+.env
+.env.backup
+.env.production
+
+# Editor files
+.vscode/
+.idea/
+*.suo
+*.swp
+Frontend_Vue_Task_List.mt
+

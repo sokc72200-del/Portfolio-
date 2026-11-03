@@ -1,0 +1,74 @@
+services:
+    backend_laravel-service:
+        build:
+            context: .
+            dockerfile: docker/laravel/Dockerfile
+        working_dir: /var/www/html
+        volumes:
+            - ./backend_laravel-app:/var/www/html
+            - backend_laravel_data:/var/www/html/vendor
+            - ./docker/laravel/entrypoint.development.sh:/usr/local/bin/entrypoint.development.sh
+        ports:
+            - "8001:8000"
+        depends_on:
+            mysql-service:
+                condition: service_healthy
+        command: ["bash", "/usr/local/bin/entrypoint.development.sh"]
+
+    frontend-service:
+        build:
+            context: .
+            dockerfile: docker/vuejs/Dockerfile
+        working_dir: /app
+        volumes:
+            - ./frontend_vuejs-app:/app
+            - frontend_vuejs_data:/app/node_modules
+            - ./docker/vuejs/entrypoint.development.sh:/usr/local/bin/entrypoint.development.sh
+        ports:
+            - "5173:5173"
+        depends_on:
+            - backend_laravel-service
+        command: ["sh", "/usr/local/bin/entrypoint.development.sh"]
+
+    mysql-service:
+        image: mysql:8.0
+        environment:
+            MYSQL_DATABASE: Portfolio
+            MYSQL_USER: Portfolio_user
+            MYSQL_PASSWORD: Portfolio_password
+            MYSQL_ROOT_PASSWORD: root
+            TZ: UTC
+        volumes:
+            - mysql_data_Portfolio:/var/lib/mysql
+        healthcheck:
+            test:
+                [
+                    "CMD",
+                    "mysqladmin",
+                    "ping",
+                    "-h",
+                    "localhost",
+                    "-uroot",
+                    "-proot",
+                ]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 30s
+
+    phpmyadmin:
+        image: phpmyadmin:5.2.2
+        depends_on:
+            - mysql-service
+        environment:
+            UPLOAD_LIMIT: 50M
+            PMA_HOST: mysql-service
+            PMA_PORT: 3306
+            PMA_USER: root
+            PMA_PASSWORD: root
+        ports:
+            - "9000:80"
+volumes:
+    mysql_data_Portfolio:
+    backend_laravel_data:
+    frontend_vuejs_data:
