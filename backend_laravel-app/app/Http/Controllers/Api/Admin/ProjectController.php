@@ -44,10 +44,9 @@ class ProjectController extends Controller
 
         $project->update($data);
 
-        if ($request->has('skill_ids')) {
+        if ($request->has('skill_ids') || $request->boolean('sync_skills')) {
             $project->skills()->sync($request->input('skill_ids', []));
         }
-
         return response()->json($project->load(['skills', 'image']));
     }
 
