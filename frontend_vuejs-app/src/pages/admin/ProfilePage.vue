@@ -13,6 +13,9 @@ const avatarFile = ref(null);
 const resumeFile = ref(null);
 const avatarPreview = ref(null);
 
+const AVATAR_MAX_BYTES = 2 * 1024 * 1024;
+const RESUME_MAX_BYTES = 5 * 1024 * 1024;
+
 const form = reactive({
   full_name: "",
   title: "",
@@ -32,12 +35,36 @@ function setAvatarPreview(url) {
 function onAvatarChange(event) {
   const file = event.target.files?.[0];
   if (!file) return;
+
+  if (file.size > AVATAR_MAX_BYTES) {
+    avatarFile.value = null;
+    setAvatarPreview(profile.value?.avatar_url ? mediaUrl(profile.value.avatar_url) : null);
+    errors.value = { ...errors.value, avatar: ["Avatar must be 2 MB or smaller."] };
+    event.target.value = "";
+    return;
+  }
+
+  delete errors.value.avatar;
   avatarFile.value = file;
   setAvatarPreview(URL.createObjectURL(file));
 }
 
 function onResumeChange(event) {
-  resumeFile.value = event.target.files?.[0] ?? null;
+  const file = event.target.files?.[0] ?? null;
+  if (!file) {
+    resumeFile.value = null;
+    return;
+  }
+
+  if (file.size > RESUME_MAX_BYTES) {
+    resumeFile.value = null;
+    errors.value = { ...errors.value, resume: ["Resume must be 5 MB or smaller."] };
+    event.target.value = "";
+    return;
+  }
+
+  delete errors.value.resume;
+  resumeFile.value = file;
 }
 
 async function loadProfile() {

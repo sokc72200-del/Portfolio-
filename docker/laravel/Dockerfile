@@ -16,6 +16,8 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo_mysql mbstring bcmath gd zip pcntl \
     && rm -rf /var/lib/apt/lists/*
 
+COPY docker/laravel/uploads.ini /usr/local/etc/php/conf.d/uploads.ini
+
 COPY docker/laravel/*.sh /usr/local/bin/
 
 COPY --from=composer:2.9 /usr/bin/composer /usr/bin/composer

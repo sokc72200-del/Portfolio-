@@ -67,20 +67,28 @@ class ProjectController extends Controller
 
     private function validated(Request $request, ?Project $project = null): array
     {
-        $required = $project === null ? 'required' : 'sometimes|required';
+        $titleRules = $project === null
+            ? ['required', 'string', 'max:150']
+            : ['sometimes', 'required', 'string', 'max:150'];
         $slugRules = $project === null
             ? ['nullable', 'string', 'max:160']
-            : ['sometimes', 'required', 'string', 'max:160'];
+            : ['sometimes', 'nullable', 'string', 'max:160'];
+        $summaryRules = $project === null
+            ? ['required', 'string', 'max:255']
+            : ['sometimes', 'required', 'string', 'max:255'];
+        $statusRules = $project === null
+            ? ['required', Rule::enum(ProjectStatus::class)]
+            : ['sometimes', 'required', Rule::enum(ProjectStatus::class)];
 
         return $request->validate([
-            'title' => [$required, 'string', 'max:150'],
+            'title' => $titleRules,
             'slug' => [...$slugRules, Rule::unique('projects', 'slug')->ignore($project?->id)],
-            'summary' => [$required, 'string', 'max:255'],
+            'summary' => $summaryRules,
             'description' => ['nullable', 'string'],
             'thumbnail' => ['nullable', 'image', 'max:2048'],
             'repo_url' => ['nullable', 'url', 'max:255'],
             'featured' => ['boolean'],
-            'status' => [$required, Rule::enum(ProjectStatus::class)],
+            'status' => $statusRules,
             'sort_order' => ['integer', 'min:0'],
             'skill_ids' => ['sometimes', 'array'],
             'skill_ids.*' => ['exists:skills,id'],
