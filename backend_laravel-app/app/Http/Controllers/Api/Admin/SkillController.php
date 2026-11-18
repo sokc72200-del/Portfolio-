@@ -57,12 +57,12 @@ class SkillController extends Controller
 
     private function validated(Request $request, ?Skill $skill = null): array
     {
-        $required = $skill === null ? 'required' : 'sometimes|required';
+        $required = $skill === null ? ['required'] : ['sometimes', 'required'];
 
         return $request->validate([
-            'name' => [$required, 'string', 'max:255'],
-            'category' => [$required, Rule::enum(SkillCategory::class)],
-            'level' => [$required, 'integer', 'between:1,100'],
+            'name' => [...$required, 'string', 'max:255'],
+            'category' => [...$required, Rule::enum(SkillCategory::class)],
+            'level' => [...$required, 'integer', 'between:1,100'],
             'icon' => ['nullable', 'string', 'max:255'],
         ]);
     }

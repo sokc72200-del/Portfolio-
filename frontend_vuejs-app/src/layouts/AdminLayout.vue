@@ -1,10 +1,13 @@
 <script setup>
-import { useRouter } from "vue-router";
+import { ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import ToastList from "@/components/ToastList.vue";
 
+const auth = useAuthStore();
+const route = useRoute();
 const router = useRouter();
-const authStore = useAuthStore();
+
 const links = [
   { to: "/admin", label: "Dashboard", exact: true },
   { to: "/admin/projects", label: "Projects" },
@@ -16,22 +19,50 @@ const links = [
   { to: "/admin/messages", label: "Messages" },
 ];
 
+const menuOpen = ref(false);
+watch(
+  () => route.fullPath,
+  () => (menuOpen.value = false),
+);
+
 async function handleLogout() {
-  await authStore.logout();
-  await router.push({ name: "admin-login" });
+  await auth.logout();
+  router.push({ name: "admin-login" });
 }
 </script>
 
 <template>
   <div class="flex min-h-screen bg-gray-100">
-    <aside class="hidden w-56 shrink-0 bg-gray-900 p-4 text-white md:block">
-      <p class="mb-6 text-lg font-semibold">Admin</p>
+    <!-- Backdrop (mobile only) -->
+    <div
+      v-if="menuOpen"
+      class="fixed inset-0 z-30 bg-black/40 md:hidden"
+      @click="menuOpen = false"
+    ></div>
+
+    <!-- Sidebar: slides in on mobile, always visible from md up -->
+    <aside
+      class="fixed inset-y-0 left-0 z-40 w-60 transform overflow-y-auto bg-gray-900 p-4 text-white transition-transform md:static md:translate-x-0"
+      :class="menuOpen ? 'translate-x-0' : '-translate-x-full'"
+    >
+      <div class="mb-6 flex items-center justify-between">
+        <p class="text-lg font-semibold">Admin</p>
+        <button
+          type="button"
+          class="rounded p-1 hover:bg-gray-800 md:hidden"
+          aria-label="Close menu"
+          @click="menuOpen = false"
+        >
+          ✕
+        </button>
+      </div>
+
       <nav class="space-y-1 text-sm">
         <RouterLink
           v-for="l in links"
           :key="l.to"
           :to="l.to"
-          class="block rounded px-3 py-2 hover:bg-gray-800"
+          class="block rounded px-3 py-2.5 hover:bg-gray-800"
           :exact-active-class="l.exact ? 'bg-gray-800 font-semibold' : ''"
           :active-class="l.exact ? '' : 'bg-gray-800 font-semibold'"
         >
@@ -40,7 +71,7 @@ async function handleLogout() {
         <RouterLink
           to="/"
           target="_blank"
-          class="block rounded px-3 py-2 text-gray-400 hover:bg-gray-800"
+          class="block rounded px-3 py-2.5 text-gray-400 hover:bg-gray-800"
         >
           View site ↗
         </RouterLink>
@@ -49,24 +80,39 @@ async function handleLogout() {
 
     <div class="flex min-w-0 flex-1 flex-col">
       <header
-        class="flex items-center justify-between bg-white px-6 py-3 shadow-sm"
+        class="flex items-center justify-between bg-white px-4 py-3 shadow-sm sm:px-6"
       >
-        <nav class="flex flex-wrap gap-3 text-sm md:hidden">
-          <RouterLink v-for="l in links" :key="l.to" :to="l.to">{{
-            l.label
-          }}</RouterLink>
-        </nav>
-        <span class="hidden text-sm text-gray-500 md:block"
-          >Signed in as {{ authStore.user?.name }}</span
-        >
+        <div class="flex items-center gap-3">
+          <button
+            type="button"
+            class="rounded p-2 hover:bg-gray-100 md:hidden"
+            aria-label="Open menu"
+            @click="menuOpen = true"
+          >
+            <svg
+              class="h-6 w-6"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <span class="hidden text-sm text-gray-500 sm:block">
+            Signed in as {{ auth.user?.name }}
+          </span>
+        </div>
         <button
-          class="rounded bg-red-600 px-3 py-1 text-sm text-white hover:bg-red-700"
+          type="button"
+          class="rounded bg-red-600 px-3 py-1.5 text-sm text-white hover:bg-red-700"
           @click="handleLogout"
         >
           Logout
         </button>
       </header>
-      <main class="flex-1 p-6"><RouterView /></main>
+
+      <main class="min-w-0 flex-1 p-4 sm:p-6"><RouterView /></main>
     </div>
 
     <ToastList />

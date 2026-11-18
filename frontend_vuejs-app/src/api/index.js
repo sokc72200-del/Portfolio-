@@ -3,7 +3,7 @@ import http from "./http";
 export const publicApi = {
     profile: () => http.get("/profile"),
     projects: (params) => http.get("/projects", { params }),
-    project: (slug) => http.get(`/projects/${slug}`),
+    project: (slug) => http.get(`/projects/${encodeURIComponent(slug)}`),
     skills: () => http.get("/skills"),
     experiences: () => http.get("/experience"),
     experience: () => http.get("/experience"),
@@ -54,4 +54,9 @@ export const adminApi = {
     message: (id) => http.get(`/admin/messages/${id}`),
     markMessageRead: (id) => http.patch(`/admin/messages/${id}/read`),
     deleteMessage: (id) => http.delete(`/admin/messages/${id}`),
+
+
+    // project gallery
+    addProjectImage: (slug, formData) => http.post(`/admin/projects/${encodeURIComponent(slug)}/images`, formData),
+    deleteProjectImage: (id) => http.delete(`/admin/images/${id}`),
 }

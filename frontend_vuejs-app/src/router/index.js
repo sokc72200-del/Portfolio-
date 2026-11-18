@@ -41,9 +41,9 @@ const router = createRouter({
       ],
     },
     {
-      path: "/admin/login",
-      name: "admin-login",
-      component: () => import("@/pages/admin/loginPage.vue"),
+      path: "/admin/Login",
+      name: "admin-Login",
+      component: () => import("@/pages/admin/LoginPage.vue"),
       meta: { guestOnly: true },
     },
     {

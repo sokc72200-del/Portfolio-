@@ -72,8 +72,8 @@ onMounted(() => load());
         <tr>
           <th class="p-3">Project</th>
           <th class="p-3">Status</th>
-          <th class="p-3">Featured</th>
-          <th class="p-3">Order</th>
+          <th class="hidden p-3 sm:table-cell">{{ p.featured ? "★" : "-" }}</th>
+          <th class="hidden p-3 sm:table-cell">{{ p.sort_order }}</th>
           <th class="p-3 text-right">Actions</th>
         </tr>
       </thead>

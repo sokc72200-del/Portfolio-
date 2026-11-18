@@ -24,7 +24,7 @@ class ProjectController extends Controller
     {
         $project = Project::published()
             ->where('slug', $slug)
-            ->with(['image', 'skills'])
+            ->with(['images', 'skills'])
             ->firstOrFail();
 
         return response()->json($project);

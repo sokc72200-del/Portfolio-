@@ -19,7 +19,7 @@ class ProjectImageController extends Controller
             'sort_order' => ['nullable', 'integer', 'min:0'],
         ]);
 
-        $image = $project->image()->create([
+        $image = $project->images()->create([
             'image_path' => $data['image']->store('projects/gallery', 'public'),
             'caption' => $data['caption'] ?? null,
             'sort_order' => $data['sort_order'] ?? 0,

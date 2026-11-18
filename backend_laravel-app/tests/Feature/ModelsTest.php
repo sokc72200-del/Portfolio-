@@ -102,7 +102,7 @@ class ModelsTest extends TestCase
             'sort_order' => 1,
         ]);
 
-        $this->assertSame($image->id, $project->image->first()->id);
+        $this->assertSame($image->id, $project->images->first()->id);
         $this->assertSame(1, $image->fresh()->sort_order);
     }
 

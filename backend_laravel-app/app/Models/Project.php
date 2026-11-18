@@ -50,7 +50,7 @@ class Project extends Model
         return 'slug';
     }
 
-    public function image(): HasMany
+    public function images(): HasMany
     {
         return $this->hasMany(ProjectImage::class)->orderBy('sort_order');
     }

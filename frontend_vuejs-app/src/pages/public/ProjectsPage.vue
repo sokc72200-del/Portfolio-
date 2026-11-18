@@ -6,7 +6,7 @@ import ProjectCard from "@/components/ProjectCard.vue";
 const projects = ref([]);
 const loading = ref(true);
 const error = ref("");
-const activeSkill = ref(null);
+const active = ref(null);
 
 const skillNames = computed(() => {
   const names = new Set();
@@ -14,12 +14,13 @@ const skillNames = computed(() => {
   return [...names].sort();
 });
 
-const filtered = computed(() => {
-  if (!activeSkill.value) return projects.value;
-  return projects.value.filter((p) =>
-    p.skills?.some((s) => s.name === activeSkill.value),
-  );
-});
+const filtered = computed(() =>
+  active.value
+    ? projects.value.filter((p) =>
+        p.skills?.some((s) => s.name === active.value),
+      )
+    : projects.value,
+);
 
 onMounted(async () => {
   try {
@@ -32,37 +33,53 @@ onMounted(async () => {
   }
 });
 </script>
+
 <template>
   <section>
-    <h1 class="text-2xl font-bold">Projects</h1>
-
-    <p v-if="loading" class="mt-4 text-gray-500">Loading...</p>
-    <p v-else-if="error" class="mt-4 text-red-600">{{ error }}</p>
-    <p v-else-if="!projects.length" class="mt-4 text-gray-500">
-      No projects yet.
+    <p class="text-xs font-semibold uppercase tracking-widest text-accent">
+      Selected portfolio
     </p>
+    <h1 class="mt-1 text-3xl font-extrabold tracking-tight sm:text-4xl">
+      Featured work
+    </h1>
+
+    <p v-if="loading" class="mt-8 text-muted">Loading...</p>
+    <p v-else-if="error" class="mt-8 text-red-400">{{ error }}</p>
+    <p v-else-if="!projects.length" class="mt-8 text-muted">No projects yet.</p>
 
     <template v-else>
-      <div class="mt-4 flex flex-wrap gap-2">
+      <div
+        class="mt-6 flex flex-wrap gap-1 rounded-2xl border border-line bg-surface p-1 sm:inline-flex"
+      >
         <button
-          class="rounded-full border px-3 py-1 text-sm"
-          :class="!activeSkill ? 'bg-gray-900 text-white' : 'bg-white'"
-          @click="activeSkill = null"
+          type="button"
+          class="rounded-xl px-4 py-2 text-sm transition"
+          :class="
+            !active
+              ? 'bg-white/10 font-semibold text-white'
+              : 'text-muted hover:text-white'
+          "
+          @click="active = null"
         >
           All
         </button>
         <button
           v-for="name in skillNames"
           :key="name"
-          class="rounded-full border px-3 py-1 text-sm"
-          :class="activeSkill === name ? 'bg-gray-900 text-white' : 'bg-white'"
-          @click="activeSkill = name"
+          type="button"
+          class="rounded-xl px-4 py-2 text-sm transition"
+          :class="
+            active === name
+              ? 'bg-white/10 font-semibold text-white'
+              : 'text-muted hover:text-white'
+          "
+          @click="active = name"
         >
           {{ name }}
         </button>
       </div>
 
-      <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         <ProjectCard v-for="p in filtered" :key="p.id" :project="p" />
       </div>
     </template>

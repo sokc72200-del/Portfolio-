@@ -28,12 +28,12 @@ class ProjectController extends Controller
         $project = Project::create($data);
         $project->skills()->sync($request->input('skill_ids', []));
 
-        return response()->json($project->load(['skills', 'image']), 201);
+        return response()->json($project->load(['skills', 'images']), 201);
     }
 
     public function show(Project $project): JsonResponse
     {
-        return response()->json($project->load(['skills', 'image']));
+        return response()->json($project->load(['skills', 'images']));
     }
 
     public function update(Request $request, Project $project): JsonResponse
@@ -47,7 +47,7 @@ class ProjectController extends Controller
         if ($request->has('skill_ids') || $request->boolean('sync_skills')) {
             $project->skills()->sync($request->input('skill_ids', []));
         }
-        return response()->json($project->load(['skills', 'image']));
+        return response()->json($project->load(['skills', 'images']));
     }
 
     public function destroy(Project $project): JsonResponse
@@ -56,7 +56,7 @@ class ProjectController extends Controller
             Storage::disk('public')->delete($project->thumbnail);
         }
 
-        foreach ($project->image as $image) {
+        foreach ($project->images as $image) {
             Storage::disk('public')->delete($image->image_path);
         }
 
