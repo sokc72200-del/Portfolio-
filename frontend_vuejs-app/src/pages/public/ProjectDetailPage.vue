@@ -89,7 +89,7 @@ const blocks = computed(() =>
 
 <template>
   <section class="mx-auto max-w-4xl">
-    <RouterLink to="/projects" class="text-sm text-muted hover:text-white">
+    <RouterLink to="/projects" class="text-sm text-muted hover:text-fg">
       &larr; Back to work
     </RouterLink>
 
@@ -128,7 +128,7 @@ const blocks = computed(() =>
           :href="project.repo_url"
           target="_blank"
           rel="noopener noreferrer"
-          class="rounded-full border border-line px-5 py-2.5 text-sm hover:border-white"
+          class="rounded-full border border-line px-5 py-2.5 text-sm hover:border-fg"
         >
           Source code ↗
         </a>
@@ -145,7 +145,7 @@ const blocks = computed(() =>
         <li
           v-for="skill in project.skills"
           :key="skill.id"
-          class="rounded-lg bg-white/5 px-3 py-1.5 text-sm text-gray-200"
+          class="rounded-lg bg-tint/5 px-3 py-1.5 text-sm text-gray-200"
         >
           {{ skill.name }}
         </li>

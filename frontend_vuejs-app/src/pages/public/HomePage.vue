@@ -97,7 +97,7 @@ onMounted(async () => {
           <p class="text-xs font-semibold uppercase tracking-wider text-accent">
             About me
           </p>
-          <p class="mt-2 text-gray-200">{{ bioSnippet }}</p>
+          <p class="mt-2 text-fg">{{ bioSnippet }}</p>
         </div>
 
         <!-- Real stats instead of invented numbers -->
@@ -115,13 +115,13 @@ onMounted(async () => {
         <div class="mt-6 flex flex-wrap justify-center gap-3 sm:justify-start">
           <RouterLink
             to="/projects"
-            class="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-ink hover:bg-gray-200"
+            class="rounded-full bg-fg px-5 py-2.5 text-sm font-semibold text-ink hover:bg-gray-200"
           >
             View work
           </RouterLink>
           <RouterLink
             to="/contact"
-            class="rounded-full border border-line px-5 py-2.5 text-sm hover:border-white"
+            class="rounded-full border border-line px-5 py-2.5 text-sm hover:border-fg"
           >
             Contact me
           </RouterLink>
@@ -130,7 +130,7 @@ onMounted(async () => {
             :href="mediaUrl(profile.resume_url)"
             target="_blank"
             rel="noopener noreferrer"
-            class="rounded-full border border-line px-5 py-2.5 text-sm hover:border-white"
+            class="rounded-full border border-line px-5 py-2.5 text-sm hover:border-fg"
           >
             Download CV
           </a>
@@ -144,7 +144,7 @@ onMounted(async () => {
         </p>
         <div class="mt-1 flex items-end justify-between gap-4">
           <h2 class="text-3xl font-extrabold tracking-tight">Featured work</h2>
-          <RouterLink to="/projects" class="text-sm text-muted hover:text-white"
+          <RouterLink to="/projects" class="text-sm text-muted hover:text-fg"
             >All projects →</RouterLink
           >
         </div>

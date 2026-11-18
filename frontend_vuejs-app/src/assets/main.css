@@ -1,21 +1,71 @@
 @import "tailwindcss";
 
-@theme {
-  --color-ink: #0a0a0c;
-  --color-surface: #141418;
-  --color-line: #26262c;
-  --color-muted: #a1a1aa;
-  --color-accent: #fbbf24;
-  --color-brand: #6366f1;
+/* Tailwind color names now point at CSS variables, so one class works in both themes */
+@theme inline {
+    --color-ink: var(--ink);
+    --color-surface: var(--surface);
+    --color-line: var(--line);
+    --color-muted: var(--muted);
+    --color-fg: var(--fg);
+    --color-soft: var(--soft);
+    --color-tint: var(--tint);
+    --color-accent: var(--accent);
+    --color-brand: var(--brand);
+    --color-danger: var(--danger);
+    --color-ok: var(--ok);
 }
 
-/* Dark theme applies ONLY inside the public layout, so the admin is untouched */
+/* Dark (default) */
+:root,
+[data-theme="dark"] {
+    --ink: #0a0a0c;
+    --surface: #141418;
+    --line: #26262c;
+    --muted: #a1a1aa;
+    --fg: #f4f4f5;
+    --soft: #d4d4d8;
+    --tint: #ffffff;
+    --accent: #fbbf24;
+    --brand: #6366f1;
+    --danger: #f87171;
+    --ok: #6ee7b7;
+    --glow-a: rgb(99 102 241 / 0.14);
+    --glow-b: rgb(251 191 36 / 0.08);
+}
+
+/* Light */
+[data-theme="light"] {
+    --ink: #f6f6f8;
+    --surface: #ffffff;
+    --line: #e4e4e7;
+    --muted: #52525b;
+    --fg: #18181b;
+    --soft: #3f3f46;
+    --tint: #18181b;
+    --accent: #b45309;
+    --brand: #4f46e5;
+    --danger: #dc2626;
+    --ok: #047857;
+    --glow-a: rgb(99 102 241 / 0.1);
+    --glow-b: rgb(251 191 36 / 0.12);
+}
+
+/* Applies ONLY inside the public layout, so the admin is untouched */
 .public-theme {
-  background-color: var(--color-ink);
-  background-image:
-    radial-gradient(60rem 30rem at 0% 0%, rgb(99 102 241 / 0.14), transparent 60%),
-    radial-gradient(50rem 30rem at 100% 100%, rgb(251 191 36 / 0.08), transparent 60%);
-  background-attachment: fixed;
-  color: #f4f4f5;
-  font-family: "Inter", system-ui, sans-serif;
+    color-scheme: dark;
+    background-color: var(--ink);
+    background-image:
+        radial-gradient(60rem 30rem at 0% 0%, var(--glow-a), transparent 60%),
+        radial-gradient(
+            50rem 30rem at 100% 100%,
+            var(--glow-b),
+            transparent 60%
+        );
+    background-attachment: fixed;
+    color: var(--fg);
+    font-family: "Inter", system-ui, sans-serif;
+}
+
+[data-theme="light"] .public-theme {
+    color-scheme: light;
 }

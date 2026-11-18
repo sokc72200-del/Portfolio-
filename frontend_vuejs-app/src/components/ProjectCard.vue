@@ -23,7 +23,7 @@ defineProps({
     />
     <div
       v-else
-      class="h-48 w-full bg-gradient-to-br from-brand/40 to-accent/30"
+      class="h-48 w-full bg-gradient to-br from-brand/40 to-accent/30"
     ></div>
 
     <div class="flex flex-1 flex-col p-5">
@@ -44,7 +44,7 @@ defineProps({
         <li
           v-for="skill in project.skills"
           :key="skill.id"
-          class="rounded-lg bg-white/5 px-2.5 py-1 text-xs text-gray-300"
+          class="rounded-lg bg-tint/5 px-2.5 py-1 text-xs text-gray-300"
         >
           {{ skill.name }}
         </li>

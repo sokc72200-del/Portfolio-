@@ -56,8 +56,8 @@ onMounted(async () => {
           class="rounded-xl px-4 py-2 text-sm transition"
           :class="
             !active
-              ? 'bg-white/10 font-semibold text-white'
-              : 'text-muted hover:text-white'
+              ? 'bg-tint/10 font-semibold text-fg'
+              : 'text-muted hover:text-fg'
           "
           @click="active = null"
         >
@@ -70,8 +70,8 @@ onMounted(async () => {
           class="rounded-xl px-4 py-2 text-sm transition"
           :class="
             active === name
-              ? 'bg-white/10 font-semibold text-white'
-              : 'text-muted hover:text-white'
+              ? 'bg-tint/10 font-semibold text-fg'
+              : 'text-muted hover:text-fg'
           "
           @click="active = name"
         >

@@ -97,7 +97,7 @@ onMounted(async () => {
                 :href="mediaUrl(profile.resume_url)"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="shrink-0 rounded-full bg-white/10 px-4 py-2 text-sm font-semibold hover:bg-white/20"
+                class="shrink-0 rounded-full bg-tint/10 px-4 py-2 text-sm font-semibold hover:bg-tint/20"
               >
                 Download CV
               </a>
@@ -106,7 +106,7 @@ onMounted(async () => {
 
           <p
             v-if="profile?.bio"
-            class="mt-6 whitespace-pre-line leading-relaxed text-muted"
+            class="mt-6 whitespace-pre-line leading-relaxed text-soft"
           >
             {{ profile.bio }}
           </p>
@@ -134,8 +134,8 @@ onMounted(async () => {
                 class="rounded-lg px-3 py-1.5 transition"
                 :class="
                   tab === t[0]
-                    ? 'bg-white/10 font-semibold text-white'
-                    : 'text-muted hover:text-white'
+                    ? 'bg-tint/10 font-semibold text-fg'
+                    : 'text-muted hover:text-fg'
                 "
                 @click="tab = t[0]"
               >
@@ -165,7 +165,7 @@ onMounted(async () => {
                     :class="
                       item.current
                         ? 'bg-accent/15 text-accent'
-                        : 'bg-white/5 text-muted'
+                        : 'bg-tint/5 text-muted'
                     "
                   >
                     {{ formatMonthYear(item.start) }} —
@@ -208,7 +208,7 @@ onMounted(async () => {
               <li
                 v-for="skill in list"
                 :key="skill.id"
-                class="rounded-lg bg-white/5 px-3 py-1.5 text-sm text-gray-200"
+                class="rounded-lg bg-tint/5 px-3 py-1.5 text-sm text-gray-200"
                 :title="skill.level + '%'"
               >
                 {{ skill.name }}

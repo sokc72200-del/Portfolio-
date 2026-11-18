@@ -2,6 +2,7 @@
 import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { mediaUrl } from "@/utils/media";
+import { useTheme } from "@/composables/useTheme";
 
 defineProps({
   brand: { type: String, default: "Portfolio" },
@@ -10,6 +11,7 @@ defineProps({
 
 const route = useRoute();
 const open = ref(false);
+const { theme, toggle } = useTheme();
 
 const links = [
   { to: "/", label: "Home" },
@@ -71,8 +73,8 @@ watch(
         <li v-for="l in links" :key="l.to">
           <RouterLink
             :to="l.to"
-            class="block rounded-full px-4 py-1.5 text-muted transition hover:text-white"
-            exact-active-class="!bg-white/10 !text-white"
+            class="block rounded-full px-4 py-1.5 text-muted transition hover:text-fg"
+            exact-active-class="!bg-tint/10 !text-fg"
           >
             {{ l.label }}
           </RouterLink>
@@ -80,9 +82,52 @@ watch(
       </ul>
 
       <div class="flex items-center gap-2">
+        <!-- Theme toggle -->
+        <button
+          type="button"
+          class="flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-surface text-accent hover:border-accent"
+          :aria-label="
+            theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
+          "
+          :title="theme === 'dark' ? 'Light mode' : 'Dark mode'"
+          @click="toggle"
+        >
+          <!-- sun (shown in dark mode) -->
+          <svg
+            v-if="theme === 'dark'"
+            class="h-5 w-5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="4" />
+            <path
+              stroke-linecap="round"
+              d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+            />
+          </svg>
+          <!-- moon (shown in light mode) -->
+          <svg
+            v-else
+            class="h-5 w-5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"
+            />
+          </svg>
+        </button>
         <RouterLink
           to="/contact"
-          class="hidden rounded-full bg-white px-4 py-2 text-sm font-semibold text-ink hover:bg-gray-200 sm:block"
+          class="hidden rounded-full bg-fg px-4 py-2 text-sm font-semibold text-ink hover:bg-gray-200 sm:block"
         >
           Hire me
         </RouterLink>
@@ -120,7 +165,7 @@ watch(
         <RouterLink
           :to="l.to"
           class="block rounded-lg px-3 py-3 text-muted"
-          exact-active-class="!bg-white/10 !text-white"
+          exact-active-class="!bg-tint/10 !text-fg"
         >
           {{ l.label }}
         </RouterLink>
@@ -128,7 +173,7 @@ watch(
       <li>
         <RouterLink
           to="/contact"
-          class="mt-2 block rounded-lg bg-white px-3 py-3 text-center font-semibold text-ink"
+          class="mt-2 block rounded-lg bg-fg px-3 py-3 text-center font-semibold text-ink"
         >
           Hire me
         </RouterLink>

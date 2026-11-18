@@ -20,7 +20,7 @@ const message = ref("");
 const loading = ref(false);
 const copied = ref(false);
 const input =
-  "w-full rounded-xl border border-line bg-ink px-3 py-2.5 text-white outline-none transition placeholder:text-muted/70 focus:border-accent";
+  "w-full rounded-xl border border-line bg-ink px-3 py-2.5 text-fg outline-none transition placeholder:text-muted/70 focus:border-accent";
 
 onMounted(async () => {
   try {
@@ -216,7 +216,7 @@ async function submit() {
 
         <button
           :disabled="loading"
-          class="mt-5 rounded-xl bg-brand px-6 py-3 font-semibold text-white shadow-lg shadow-brand/30 hover:bg-indigo-500 disabled:opacity-50"
+          class="mt-5 rounded-xl bg-brand px-6 py-3 font-semibold text-fg shadow-lg shadow-brand/30 hover:bg-indigo-500 disabled:opacity-50"
         >
           {{ loading ? "Sending..." : "Send message" }}
         </button>
