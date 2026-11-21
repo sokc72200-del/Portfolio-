@@ -127,53 +127,53 @@ onBeforeUnmount(() => {
 <template>
   <section class="max-w-3xl">
     <h1 class="text-2xl font-bold">Profile</h1>
-    <p v-if="loading" class="mt-5 text-gray-500">Loading profile...</p>
-    <form v-else class="mt-5 space-y-4 rounded-lg bg-white p-5 shadow" @submit.prevent="saveProfile">
+    <p v-if="loading" class="mt-5 text-muted">Loading profile...</p>
+    <form v-else class="mt-5 space-y-4 rounded-lg bg-surface p-5 shadow" @submit.prevent="saveProfile">
       <div>
         <label for="profile-name" class="mb-1 block text-sm">Full name *</label>
         <input id="profile-name" v-model="form.full_name" required maxlength="255" class="w-full rounded border px-3 py-2" />
-        <p v-if="errors.full_name" class="mt-1 text-sm text-red-600">{{ errors.full_name[0] }}</p>
+        <p v-if="errors.full_name" class="mt-1 text-sm text-danger">{{ errors.full_name[0] }}</p>
       </div>
       <div>
         <label for="profile-title" class="mb-1 block text-sm">Professional title *</label>
         <input id="profile-title" v-model="form.title" required maxlength="255" class="w-full rounded border px-3 py-2" />
-        <p v-if="errors.title" class="mt-1 text-sm text-red-600">{{ errors.title[0] }}</p>
+        <p v-if="errors.title" class="mt-1 text-sm text-danger">{{ errors.title[0] }}</p>
       </div>
       <div>
         <label for="profile-email" class="mb-1 block text-sm">Public email *</label>
         <input id="profile-email" v-model="form.email" type="email" required maxlength="255" class="w-full rounded border px-3 py-2" />
-        <p v-if="errors.email" class="mt-1 text-sm text-red-600">{{ errors.email[0] }}</p>
+        <p v-if="errors.email" class="mt-1 text-sm text-danger">{{ errors.email[0] }}</p>
       </div>
       <div class="grid gap-4 sm:grid-cols-2">
         <label class="text-sm">
           Phone
           <input v-model="form.phone_number" maxlength="255" class="mt-1 w-full rounded border px-3 py-2" />
-          <span v-if="errors.phone_number" class="mt-1 block text-red-600">{{ errors.phone_number[0] }}</span>
+          <span v-if="errors.phone_number" class="mt-1 block text-danger">{{ errors.phone_number[0] }}</span>
         </label>
         <label class="text-sm">
           Address
           <input v-model="form.address" maxlength="255" class="mt-1 w-full rounded border px-3 py-2" />
-          <span v-if="errors.address" class="mt-1 block text-red-600">{{ errors.address[0] }}</span>
+          <span v-if="errors.address" class="mt-1 block text-danger">{{ errors.address[0] }}</span>
         </label>
       </div>
       <div>
         <label for="profile-bio" class="mb-1 block text-sm">Bio *</label>
         <textarea id="profile-bio" v-model="form.bio" required rows="6" class="w-full rounded border px-3 py-2"></textarea>
-        <p v-if="errors.bio" class="mt-1 text-sm text-red-600">{{ errors.bio[0] }}</p>
+        <p v-if="errors.bio" class="mt-1 text-sm text-danger">{{ errors.bio[0] }}</p>
       </div>
       <div>
         <label for="profile-avatar" class="mb-1 block text-sm">Avatar (max 2 MB)</label>
         <img v-if="avatarPreview" :src="avatarPreview" alt="Profile avatar preview" class="mb-2 h-24 w-24 rounded-full object-cover" />
         <input id="profile-avatar" type="file" accept="image/*" class="block" @change="onAvatarChange" />
-        <p v-if="errors.avatar" class="mt-1 text-sm text-red-600">{{ errors.avatar[0] }}</p>
+        <p v-if="errors.avatar" class="mt-1 text-sm text-danger">{{ errors.avatar[0] }}</p>
       </div>
       <div>
         <label for="profile-resume" class="mb-1 block text-sm">Resume (PDF, max 5 MB)</label>
-        <p v-if="profile?.resume_url" class="mb-2 text-sm"><a :href="mediaUrl(profile.resume_url)" target="_blank" rel="noopener noreferrer" class="text-blue-700 hover:underline">View current resume</a></p>
+        <p v-if="profile?.resume_url" class="mb-2 text-sm"><a :href="mediaUrl(profile.resume_url)" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">View current resume</a></p>
         <input id="profile-resume" type="file" accept="application/pdf,.pdf" class="block" @change="onResumeChange" />
-        <p v-if="errors.resume" class="mt-1 text-sm text-red-600">{{ errors.resume[0] }}</p>
+        <p v-if="errors.resume" class="mt-1 text-sm text-danger">{{ errors.resume[0] }}</p>
       </div>
-      <button :disabled="saving" class="rounded bg-gray-900 px-5 py-2 text-white disabled:opacity-50">
+      <button :disabled="saving" class="rounded bg-brand px-5 py-2 text-white disabled:opacity-50">
         {{ saving ? "Saving..." : "Save profile" }}
       </button>
     </form>

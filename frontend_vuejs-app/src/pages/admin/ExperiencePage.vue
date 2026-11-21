@@ -109,26 +109,26 @@ onMounted(loadExperiences);
 <template>
   <section class="max-w-4xl">
     <h1 class="text-2xl font-bold">Experience</h1>
-    <form class="mt-5 grid gap-4 rounded-lg bg-white p-5 shadow sm:grid-cols-2" @submit.prevent="saveExperience">
+    <form class="mt-5 grid gap-4 rounded-lg bg-surface p-5 shadow sm:grid-cols-2" @submit.prevent="saveExperience">
       <label class="text-sm">
         Company *
         <input v-model="form.company_name" required maxlength="255" class="mt-1 w-full rounded border px-3 py-2" />
-        <span v-if="errors.company_name" class="mt-1 block text-red-600">{{ errors.company_name[0] }}</span>
+        <span v-if="errors.company_name" class="mt-1 block text-danger">{{ errors.company_name[0] }}</span>
       </label>
       <label class="text-sm">
         Position *
         <input v-model="form.position" required maxlength="255" class="mt-1 w-full rounded border px-3 py-2" />
-        <span v-if="errors.position" class="mt-1 block text-red-600">{{ errors.position[0] }}</span>
+        <span v-if="errors.position" class="mt-1 block text-danger">{{ errors.position[0] }}</span>
       </label>
       <label class="text-sm">
         Start date *
         <input v-model="form.start_date" type="date" required class="mt-1 w-full rounded border px-3 py-2" />
-        <span v-if="errors.start_date" class="mt-1 block text-red-600">{{ errors.start_date[0] }}</span>
+        <span v-if="errors.start_date" class="mt-1 block text-danger">{{ errors.start_date[0] }}</span>
       </label>
       <label class="text-sm">
         End date
-        <input v-model="form.end_date" type="date" :disabled="form.is_current" class="mt-1 w-full rounded border px-3 py-2 disabled:bg-gray-100" />
-        <span v-if="errors.end_date" class="mt-1 block text-red-600">{{ errors.end_date[0] }}</span>
+        <input v-model="form.end_date" type="date" :disabled="form.is_current" class="mt-1 w-full rounded border px-3 py-2 disabled:bg-tint/10" />
+        <span v-if="errors.end_date" class="mt-1 block text-danger">{{ errors.end_date[0] }}</span>
       </label>
       <label class="flex items-center gap-2 text-sm sm:col-span-2">
         <input v-model="form.is_current" type="checkbox" class="h-4 w-4" />
@@ -137,39 +137,39 @@ onMounted(loadExperiences);
       <label class="text-sm sm:col-span-2">
         Location
         <input v-model="form.location" maxlength="255" class="mt-1 w-full rounded border px-3 py-2" />
-        <span v-if="errors.location" class="mt-1 block text-red-600">{{ errors.location[0] }}</span>
+        <span v-if="errors.location" class="mt-1 block text-danger">{{ errors.location[0] }}</span>
       </label>
       <label class="text-sm sm:col-span-2">
         Description
         <textarea v-model="form.description" rows="4" class="mt-1 w-full rounded border px-3 py-2"></textarea>
-        <span v-if="errors.description" class="mt-1 block text-red-600">{{ errors.description[0] }}</span>
+        <span v-if="errors.description" class="mt-1 block text-danger">{{ errors.description[0] }}</span>
       </label>
       <div class="flex gap-2 sm:col-span-2">
-        <button :disabled="saving" class="rounded bg-gray-900 px-4 py-2 text-white disabled:opacity-50">
+        <button :disabled="saving" class="rounded bg-brand px-4 py-2 text-white disabled:opacity-50">
           {{ saving ? "Saving..." : editingId ? "Save changes" : "Add experience" }}
         </button>
         <button v-if="editingId" type="button" class="rounded border px-4 py-2" @click="resetForm">Cancel edit</button>
       </div>
     </form>
 
-    <p v-if="loading" class="mt-5 text-gray-500">Loading experience...</p>
+    <p v-if="loading" class="mt-5 text-muted">Loading experience...</p>
     <div v-else-if="experiences.length" class="mt-5 space-y-3">
-      <article v-for="item in experiences" :key="item.id" class="rounded-lg bg-white p-5 shadow">
+      <article v-for="item in experiences" :key="item.id" class="rounded-lg bg-surface p-5 shadow">
         <div class="flex flex-wrap items-start justify-between gap-3">
           <div>
             <h2 class="font-semibold">{{ item.position }} · {{ item.company_name }}</h2>
-            <p class="text-sm text-gray-600">{{ item.location || "Location not specified" }}</p>
-            <p class="text-sm text-gray-500">{{ dateInput(item.start_date) }} – {{ item.is_current ? "Present" : dateInput(item.end_date) || "End date not set" }}</p>
+            <p class="text-sm text-muted">{{ item.location || "Location not specified" }}</p>
+            <p class="text-sm text-muted">{{ dateInput(item.start_date) }} – {{ item.is_current ? "Present" : dateInput(item.end_date) || "End date not set" }}</p>
             <p v-if="item.description" class="mt-2 whitespace-pre-line text-sm">{{ item.description }}</p>
           </div>
           <div class="flex gap-3 text-sm">
-            <button class="text-blue-700 hover:underline" @click="editExperience(item)">Edit</button>
-            <button class="text-red-700 hover:underline" @click="deleteTarget = item">Delete</button>
+            <button class="text-accent hover:underline" @click="editExperience(item)">Edit</button>
+            <button class="text-danger hover:underline" @click="deleteTarget = item">Delete</button>
           </div>
         </div>
       </article>
     </div>
-    <p v-else class="mt-5 text-gray-500">No experience added yet.</p>
+    <p v-else class="mt-5 text-muted">No experience added yet.</p>
 
     <ConfirmModal :open="!!deleteTarget" title="Delete experience?" :message="`Delete ${deleteTarget?.position} at ${deleteTarget?.company_name}?`" :loading="deleting" @confirm="deleteExperience" @cancel="deleteTarget = null" />
   </section>

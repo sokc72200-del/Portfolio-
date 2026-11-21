@@ -69,3 +69,43 @@
 [data-theme="light"] .public-theme {
     color-scheme: light;
 }
+/* Admin theme: uses the same tokens as the public site */
+.admin-theme {
+    color-scheme: dark;
+    background-color: var(--ink);
+    color: var(--fg);
+    font-family: "Inter", system-ui, sans-serif;
+}
+[data-theme="light"] .admin-theme {
+    color-scheme: light;
+}
+
+/* In @layer base so Tailwind utilities (border-brand, bg-brand...) still win */
+@layer base {
+    .admin-theme * {
+        border-color: var(--line);
+    }
+    .admin-theme
+        :where(
+            input:not(
+                [type="checkbox"],
+                [type="radio"],
+                [type="range"],
+                [type="file"]
+            ),
+            select,
+            textarea
+        ) {
+        background-color: var(--ink);
+        color: var(--fg);
+    }
+    .admin-theme :where(input, select, textarea):focus {
+        outline: 2px solid var(--brand);
+        outline-offset: 0;
+        border-color: var(--brand);
+    }
+    .admin-theme ::placeholder {
+        color: var(--muted);
+        opacity: 0.7;
+    }
+}

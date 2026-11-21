@@ -143,7 +143,7 @@ async function submit() {
   <div class="max-w-3xl">
     <RouterLink
       :to="{ name: 'admin-projects' }"
-      class="text-sm text-gray-600 hover:underline"
+      class="text-sm text-muted hover:underline"
     >
       &larr; Back to projects
     </RouterLink>
@@ -151,11 +151,11 @@ async function submit() {
       {{ isEdit ? "Edit project" : "New project" }}
     </h1>
 
-    <p v-if="loading" class="mt-6 text-gray-500">Loading...</p>
+    <p v-if="loading" class="mt-6 text-muted">Loading...</p>
 
     <template v-else>
       <form
-        class="mt-6 space-y-5 rounded-lg bg-white p-6 shadow"
+        class="mt-6 space-y-5 rounded-lg bg-surface p-6 shadow"
         novalidate
         @submit.prevent="submit"
       >
@@ -170,7 +170,7 @@ async function submit() {
             type="text"
             class="w-full rounded border px-3 py-2"
           />
-          <p v-if="errors.title" class="mt-1 text-sm text-red-600">
+          <p v-if="errors.title" class="mt-1 text-sm text-danger">
             {{ errors.title[0] }}
           </p>
         </div>
@@ -186,7 +186,7 @@ async function submit() {
             type="text"
             class="w-full rounded border px-3 py-2"
           />
-          <p v-if="errors.slug" class="mt-1 text-sm text-red-600">
+          <p v-if="errors.slug" class="mt-1 text-sm text-danger">
             {{ errors.slug[0] }}
           </p>
         </div>
@@ -203,7 +203,7 @@ async function submit() {
             maxlength="255"
             class="w-full rounded border px-3 py-2"
           />
-          <p v-if="errors.summary" class="mt-1 text-sm text-red-600">
+          <p v-if="errors.summary" class="mt-1 text-sm text-danger">
             {{ errors.summary[0] }}
           </p>
         </div>
@@ -219,7 +219,7 @@ async function submit() {
             rows="8"
             class="w-full rounded border px-3 py-2"
           ></textarea>
-          <p v-if="errors.description" class="mt-1 text-sm text-red-600">
+          <p v-if="errors.description" class="mt-1 text-sm text-danger">
             {{ errors.description[0] }}
           </p>
         </div>
@@ -236,7 +236,7 @@ async function submit() {
             placeholder="https://github.com/..."
             class="w-full rounded border px-3 py-2"
           />
-          <p v-if="errors.repo_url" class="mt-1 text-sm text-red-600">
+          <p v-if="errors.repo_url" class="mt-1 text-sm text-danger">
             {{ errors.repo_url[0] }}
           </p>
         </div>
@@ -256,7 +256,7 @@ async function submit() {
               <option value="published">Published</option>
               <option value="archived">Archived</option>
             </select>
-            <p v-if="errors.status" class="mt-1 text-sm text-red-600">
+            <p v-if="errors.status" class="mt-1 text-sm text-danger">
               {{ errors.status[0] }}
             </p>
           </div>
@@ -271,7 +271,7 @@ async function submit() {
               min="0"
               class="w-full rounded border px-3 py-2"
             />
-            <p v-if="errors.sort_order" class="mt-1 text-sm text-red-600">
+            <p v-if="errors.sort_order" class="mt-1 text-sm text-danger">
               {{ errors.sort_order[0] }}
             </p>
           </div>
@@ -284,7 +284,7 @@ async function submit() {
         <!-- Skills -->
         <fieldset>
           <legend class="mb-2 text-sm font-medium">Skills used</legend>
-          <p v-if="!allSkills.length" class="text-sm text-gray-500">
+          <p v-if="!allSkills.length" class="text-sm text-muted">
             No skills yet. Add some on the Skills page first.
           </p>
           <div class="flex flex-wrap gap-2">
@@ -294,8 +294,8 @@ async function submit() {
               class="flex cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1 text-sm"
               :class="
                 form.skill_ids.includes(s.id)
-                  ? 'border-gray-900 bg-gray-900 text-white'
-                  : 'bg-white'
+                  ? 'border-brand bg-brand text-white'
+                  : 'bg-surface'
               "
             >
               <input
@@ -307,7 +307,7 @@ async function submit() {
               {{ s.name }}
             </label>
           </div>
-          <p v-if="errors.skill_ids" class="mt-1 text-sm text-red-600">
+          <p v-if="errors.skill_ids" class="mt-1 text-sm text-danger">
             {{ errors.skill_ids[0] }}
           </p>
         </fieldset>
@@ -329,7 +329,7 @@ async function submit() {
             accept="image/*"
             @change="onThumbnail"
           />
-          <p v-if="errors.thumbnail" class="mt-1 text-sm text-red-600">
+          <p v-if="errors.thumbnail" class="mt-1 text-sm text-danger">
             {{ errors.thumbnail[0] }}
           </p>
         </div>
@@ -337,7 +337,7 @@ async function submit() {
         <div class="flex gap-3 pt-2">
           <button
             :disabled="saving"
-            class="rounded bg-gray-900 px-5 py-2 text-white disabled:opacity-50"
+            class="rounded bg-brand px-5 py-2 text-white disabled:opacity-50"
           >
             {{
               saving ? "Saving..." : isEdit ? "Save changes" : "Create project"

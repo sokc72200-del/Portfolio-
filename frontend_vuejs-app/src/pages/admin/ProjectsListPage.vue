@@ -1,9 +1,12 @@
 <script setup>
 import { ref, onMounted } from "vue";
+import { FolderKanban, Plus, Pencil, Trash2, Star } from "lucide-vue-next";
 import { adminApi } from "@/api";
 import { useToastStore } from "@/stores/toast";
 import ConfirmModal from "@/components/ConfirmModal.vue";
 import { mediaUrl } from "@/utils/media";
+import PageHeader from "@/components/PageHeader.vue";
+import { Sparkles } from "lucide-vue-next";
 
 const toast = useToastStore();
 
@@ -14,6 +17,12 @@ const loading = ref(true);
 
 const toDelete = ref(null);
 const deleting = ref(false);
+
+const statusClass = {
+  published: "bg-ok/15 text-ok",
+  draft: "bg-tint/10 text-muted",
+  archived: "bg-amber-500/15 text-amber-500",
+};
 
 async function load(p = 1) {
   loading.value = true;
@@ -52,94 +61,163 @@ onMounted(() => load());
 </script>
 
 <template>
-  <div class="flex items-center justify-between">
-    <h1 class="text-2xl font-bold">Projects</h1>
+  <PageHeader
+    title="Projects"
+    subtitle="Manage your portfolio work"
+    :icon="FolderKanban"
+  >
     <RouterLink
       :to="{ name: 'admin-project-create' }"
-      class="rounded bg-gray-900 px-4 py-2 text-sm text-white"
+      class="flex items-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90"
     >
-      + New project
+      <Plus class="h-4 w-4" aria-hidden="true" /> New project
     </RouterLink>
-  </div>
-  <p v-if="loading" class="mt-6 text-gray-500">Loading...</p>
-  <p v-else-if="!projects.length" class="mt-6 text-gray-500">
-    No projects yet. Create your first one.
-  </p>
+  </PageHeader>
 
-  <div v-else class="mt-6 overflow-x-auto rounded-lg bg-white shadow">
-    <table class="w-full text-left text-sm">
-      <thead class="border-b bg-gray-50 text-gray-600">
-        <tr>
-          <th class="p-3">Project</th>
-          <th class="p-3">Status</th>
-          <th class="hidden p-3 sm:table-cell">{{ p.featured ? "★" : "-" }}</th>
-          <th class="hidden p-3 sm:table-cell">{{ p.sort_order }}</th>
-          <th class="p-3 text-right">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="p in projects" :key="p.id" class="border-b last:border-0">
-          <td class="p-3">
-            <div class="flex items-center gap-3">
-              <img
-                v-if="p.thumbnail_url"
-                :src="mediaUrl(p.thumbnail_url)"
-                alt=""
-                class="h-10 w-14 rounded object-cover"
-              />
-              <div v-else class="h-10 w-14 rounded bg-gray-200"></div>
-              <span class="font-medium">{{ p.title }}</span>
-            </div>
-          </td>
-          <td class="p-3">
-            <span
-              class="rounded-full px-2 py-0.5 text-xs"
-              :class="
-                p.status === 'published'
-                  ? 'bg-green-100 text-green-700'
-                  : 'bg-gray-200 text-gray-700'
-              "
-            >
-              {{ p.status }}
-            </span>
-          </td>
-          <td class="p-3">{{ p.featured ? "★" : "-" }}</td>
-          <td class="p-3">{{ p.sort_order }}</td>
-          <td class="p-3 text-right">
-            <RouterLink
-              :to="{ name: 'admin-project-edit', params: { slug: p.slug } }"
-              class="mr-3 text-blue-600 hover:underline"
-              >Edit</RouterLink
-            >
-            <button class="text-red-600 hover:underline" @click="toDelete = p">
-              Delete
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
+  <p v-if="loading" class="text-muted">Loading...</p>
   <div
-    v-if="lastPage > 1"
-    class="mt-4 flex items-center justify-center gap-3 text-sm"
+    v-else-if="!projects.length"
+    class="rounded-2xl border border-dashed border-line p-10 text-center text-muted"
   >
-    <button
-      :disabled="page <= 1"
-      class="rounded border px-3 py-1 disabled:opacity-40"
-      @click="load(page - 1)"
-    >
-      Previous
-    </button>
-    <span>Page {{ page }} of {{ lastPage }}</span>
-    <button
-      :disabled="page >= lastPage"
-      class="rounded border px-3 py-1 disabled:opacity-40"
-      @click="load(page + 1)"
-    >
-      Next
-    </button>
+    No projects yet. Create your first one.
   </div>
+
+  <template v-else>
+    <!-- Desktop table -->
+    <div
+      class="hidden overflow-hidden rounded-2xl border border-line bg-surface md:block"
+    >
+      <table class="w-full text-left text-sm">
+        <thead
+          class="border-b border-line bg-tint/5 text-xs uppercase tracking-wider text-muted"
+        >
+          <tr>
+            <th class="p-4">Project</th>
+            <th class="p-4">Status</th>
+            <th class="p-4">Order</th>
+            <th class="p-4 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-line">
+          <tr v-for="p in projects" :key="p.id" class="hover:bg-tint/5">
+            <td class="p-4">
+              <div class="flex items-center gap-3">
+                <img
+                  v-if="p.thumbnail_url"
+                  :src="mediaUrl(p.thumbnail_url)"
+                  alt=""
+                  class="h-11 w-16 rounded-lg object-cover"
+                />
+                <div v-else class="h-11 w-16 rounded-lg bg-tint/10"></div>
+                <span class="font-medium">{{ p.title }}</span>
+                <Star
+                  v-if="p.featured"
+                  class="h-4 w-4 fill-amber-400 text-amber-400"
+                  aria-label="Featured"
+                />
+              </div>
+            </td>
+            <td class="p-4">
+              <span
+                class="rounded-full px-2.5 py-1 text-xs capitalize"
+                :class="statusClass[p.status]"
+                >{{ p.status }}</span
+              >
+            </td>
+            <td class="p-4 text-muted">{{ p.sort_order }}</td>
+            <td class="p-4">
+              <div class="flex justify-end gap-2">
+                <RouterLink
+                  :to="{ name: 'admin-project-edit', params: { slug: p.slug } }"
+                  class="rounded-lg border border-line p-2 text-muted hover:border-brand hover:text-brand"
+                  :aria-label="`Edit ${p.title}`"
+                >
+                  <Pencil class="h-4 w-4" />
+                </RouterLink>
+                <button
+                  type="button"
+                  class="rounded-lg border border-line p-2 text-muted hover:border-danger hover:text-danger"
+                  :aria-label="`Delete ${p.title}`"
+                  @click="toDelete = p"
+                >
+                  <Trash2 class="h-4 w-4" />
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mobile cards -->
+    <ul class="space-y-3 md:hidden">
+      <li
+        v-for="p in projects"
+        :key="p.id"
+        class="overflow-hidden rounded-2xl border border-line bg-surface"
+      >
+        <img
+          v-if="p.thumbnail_url"
+          :src="mediaUrl(p.thumbnail_url)"
+          alt=""
+          class="h-32 w-full object-cover"
+        />
+        <div class="p-4">
+          <div class="flex items-start justify-between gap-2">
+            <h2 class="font-semibold">{{ p.title }}</h2>
+            <Star
+              v-if="p.featured"
+              class="h-4 w-4 shrink-0 fill-amber-400 text-amber-400"
+              aria-label="Featured"
+            />
+          </div>
+          <div class="mt-2 flex items-center justify-between">
+            <span
+              class="rounded-full px-2.5 py-1 text-xs capitalize"
+              :class="statusClass[p.status]"
+              >{{ p.status }}</span
+            >
+            <div class="flex gap-2">
+              <RouterLink
+                :to="{ name: 'admin-project-edit', params: { slug: p.slug } }"
+                class="flex items-center gap-1.5 rounded-lg border border-line px-3 py-2 text-sm"
+              >
+                <Pencil class="h-4 w-4" /> Edit
+              </RouterLink>
+              <button
+                type="button"
+                class="flex items-center gap-1.5 rounded-lg border border-line px-3 py-2 text-sm text-danger"
+                @click="toDelete = p"
+              >
+                <Trash2 class="h-4 w-4" /> Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+
+    <div
+      v-if="lastPage > 1"
+      class="mt-5 flex items-center justify-center gap-3 text-sm"
+    >
+      <button
+        :disabled="page <= 1"
+        class="rounded-lg border border-line px-4 py-2 disabled:opacity-40"
+        @click="load(page - 1)"
+      >
+        Previous
+      </button>
+      <span class="text-muted">Page {{ page }} of {{ lastPage }}</span>
+      <button
+        :disabled="page >= lastPage"
+        class="rounded-lg border border-line px-4 py-2 disabled:opacity-40"
+        @click="load(page + 1)"
+      >
+        Next
+      </button>
+    </div>
+  </template>
 
   <ConfirmModal
     :open="!!toDelete"

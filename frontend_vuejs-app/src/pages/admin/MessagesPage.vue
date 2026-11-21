@@ -71,19 +71,19 @@ onMounted(() => loadMessages());
     <div class="flex flex-wrap items-end justify-between gap-2">
       <div>
         <h1 class="text-2xl font-bold">Messages</h1>
-        <p class="mt-1 text-sm text-gray-600">{{ unreadCount }} unread</p>
+        <p class="mt-1 text-sm text-muted">{{ unreadCount }} unread</p>
       </div>
     </div>
 
-    <p v-if="loading" class="mt-5 text-gray-500">Loading messages...</p>
-    <p v-else-if="!messages.length" class="mt-5 text-gray-500">No messages received yet.</p>
+    <p v-if="loading" class="mt-5 text-muted">Loading messages...</p>
+    <p v-else-if="!messages.length" class="mt-5 text-muted">No messages received yet.</p>
     <div v-else class="mt-5 grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-      <div class="overflow-hidden rounded-lg bg-white shadow">
+      <div class="overflow-hidden rounded-lg bg-surface shadow">
         <button
           v-for="message in messages"
           :key="message.id"
-          class="block w-full border-b p-4 text-left last:border-0 hover:bg-gray-50"
-          :class="selectedMessage?.id === message.id ? 'bg-gray-50' : ''"
+          class="block w-full border-b p-4 text-left last:border-0 hover:bg-tint/5"
+          :class="selectedMessage?.id === message.id ? 'bg-tint/5' : ''"
           @click="openMessage(message)"
         >
           <span class="flex items-center justify-between gap-2">
@@ -91,21 +91,21 @@ onMounted(() => loadMessages());
             <span v-if="!message.is_read" class="shrink-0 rounded-full bg-blue-100 px-2 py-0.5 text-xs text-blue-800">Unread</span>
           </span>
           <span class="mt-1 block truncate text-sm">{{ message.subject || "No subject" }}</span>
-          <span class="mt-1 block truncate text-xs text-gray-500">{{ message.email }}</span>
+          <span class="mt-1 block truncate text-xs text-muted">{{ message.email }}</span>
         </button>
       </div>
 
-      <article class="min-h-48 rounded-lg bg-white p-5 shadow">
-        <p v-if="detailLoading" class="text-gray-500">Loading message...</p>
-        <p v-else-if="!selectedMessage" class="text-gray-500">Select a message to read it.</p>
+      <article class="min-h-48 rounded-lg bg-surface p-5 shadow">
+        <p v-if="detailLoading" class="text-muted">Loading message...</p>
+        <p v-else-if="!selectedMessage" class="text-muted">Select a message to read it.</p>
         <template v-else>
           <div class="flex items-start justify-between gap-3">
             <div>
               <h2 class="text-lg font-semibold">{{ selectedMessage.subject || "No subject" }}</h2>
-              <p class="mt-1 text-sm text-gray-600">{{ selectedMessage.name }} · <a :href="`mailto:${selectedMessage.email}`" class="text-blue-700 hover:underline">{{ selectedMessage.email }}</a></p>
-              <p class="mt-1 text-xs text-gray-500">{{ new Date(selectedMessage.created_at).toLocaleString() }}</p>
+              <p class="mt-1 text-sm text-muted">{{ selectedMessage.name }} · <a :href="`mailto:${selectedMessage.email}`" class="text-accent hover:underline">{{ selectedMessage.email }}</a></p>
+              <p class="mt-1 text-xs text-muted">{{ new Date(selectedMessage.created_at).toLocaleString() }}</p>
             </div>
-            <button class="text-sm text-red-700 hover:underline" @click="deleteTarget = selectedMessage">Delete</button>
+            <button class="text-sm text-danger hover:underline" @click="deleteTarget = selectedMessage">Delete</button>
           </div>
           <p class="mt-5 whitespace-pre-line break-words text-sm leading-relaxed">{{ selectedMessage.body }}</p>
         </template>
